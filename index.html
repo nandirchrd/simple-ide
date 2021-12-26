@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/theme/dracula.css">
+    <script src="codemirror/lib/codemirror.js"></script>
+    <script src="codemirror/mode/xml/xml.js"></script>
+    <script src="codemirror/mode/css/css.js"></script>
+    <script src="codemirror/mode/javascript/javascript.js"></script>
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+        }
+        .CodeMirror{
+            height: 100%;
+        }
+        .container{
+            margin: auto;
+            width: 100vw;
+            display: grid;
+            border: 1px solid red;
+            grid-template-columns: repeat(12,1fr);
+            grid-template-rows: 50vh 40vh;            
+        }
+        iframe{
+            width: 100%;
+            height: 100%;
+            grid-column-start: 1;
+            grid-column-end: -1;
+            border: 1px solid black;
+
+        }
+        div:nth-child(2){
+            border-right: 2px solid white;
+            grid-column-start: 2;
+            grid-column-end: 5;
+        }
+        div:nth-child(3){
+            border-right: 2px solid white;
+            grid-column-start: 5;
+            grid-column-end: 9;
+        }
+        div:nth-child(4){
+            grid-column-start: 9;
+            grid-column-end: 12;
+        }
+        @media only screen and (max-width: 768px) {
+            body {
+            }
+            div:nth-child(2){
+                grid-column-start: 1;
+                grid-column-end: -1;
+                border: none;
+            }
+            div:nth-child(3){
+                display: none;
+                grid-column-start: 5;
+                grid-column-end: 9;
+            }
+            div:nth-child(4){
+                display: none;
+                grid-column-start: 9;
+                grid-column-end: 13;
+            }
+        }
+        @media only screen and (min-width: 768px) and (max-width: 992px) {
+            body {
+            }
+            div:nth-child(2){
+                grid-column-start: 1;
+                grid-column-end: 5;
+            }
+            div:nth-child(3){
+                grid-column-start: 5;
+                grid-column-end: 9;
+            }
+            div:nth-child(4){
+                grid-column-start: 9;
+                grid-column-end: 13;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <h1>This is is not 100% Works. It still developing</h1>
+    <div class="container">
+        <iframe id="preview"></iframe>
+        <div id="css">
+        </div>
+        <div id="html"></div>
+        <div id="js"></div>
+    </div>
+    <script>
+        let html = document.getElementById('html');
+        let css = document.getElementById('css');
+        let js = document.getElementById('js');
+
+        html.addEventListener('keydown', handleChange);
+        css.addEventListener('keydown', handleChange);
+        js.addEventListener('keydown', (e)=> { if(e.keyCode === 13){ handleChange() } });
+        const htmlEditor = CodeMirror(html, {
+            value: '<--! HTML CODE -->',
+            lineNumbers: true,
+            tabSize: 4,
+            mode: 'xml',
+            theme: 'dracula'
+        })
+        const cssEditor = CodeMirror(css, {
+            value: '/* CSS CODE */',
+            lineNumbers: true,
+            tabSize: 4,
+            mode: 'css',
+            theme: 'dracula'
+        })
+        const jsEditor = CodeMirror(js, {
+            value: '// Javascript CODE',
+            lineNumbers: true,
+            tabSize: 4,
+            mode: 'javascript',
+            theme: 'dracula',
+        })
+
+        function handleChange(){
+            let preview = document.getElementById('preview').contentWindow.document;
+            let htmlCode = htmlEditor.getValue();
+            let cssCode = "<style>" + cssEditor.getValue() + "</style/>";
+            let jsCode = "<scri" + "pt>" + jsEditor.getValue() + "</scri" + "pt>";
+            
+            preview.open();
+            preview.write(htmlCode+cssCode+jsCode);
+            preview.close();
+            console.log(preview)
+
+        }
+    </script>
+</body>
+</html>
