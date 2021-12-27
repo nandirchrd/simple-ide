@@ -20,13 +20,20 @@
         body{
         }
         .CodeMirror{
-            height: 100%;
+            height: calc(100% - 10%);
+            width: 100%;
+        }
+        .CodeMirror-vscrollbar::-webkit-scrollbar{
+            width: 0.3em;
+            /* background-color: #282A36; */
+        }
+        .CodeMirror-vscrollbar::-webkit-scrollbar-thumb{
+            background-color: white;
         }
         .container{
             margin: auto;
             width: 100vw;
             display: grid;
-            border: 1px solid red;
             grid-template-columns: repeat(12,1fr);
             grid-template-rows: 50vh 40vh;            
         }
@@ -38,13 +45,35 @@
             border: 1px solid black;
 
         }
+        #css, #html{
+            border-right: 1px solid white;
+        }
+        #css, #html, #js{
+            height: 100%;
+            width: 100%;
+            background-color: #282A36;
+        }
+        .CodeMirror::-webkit-scrollbar{
+            width: 0.5em;
+        }
+
+        .alert{
+            color: red;
+            text-align: center;
+        }
+        .header{
+            background-color: black;
+            color: white;
+            text-align: center;
+        }
+        
         div:nth-child(2){
-            border-right: 2px solid white;
+            margin-right: 2px;
             grid-column-start: 2;
             grid-column-end: 5;
         }
         div:nth-child(3){
-            border-right: 2px solid white;
+            margin-right: 2px;
             grid-column-start: 5;
             grid-column-end: 9;
         }
@@ -55,32 +84,35 @@
         @media only screen and (max-width: 768px) {
             .container{
                 display: grid;
-                border: 1px solid red;
+                width: 100vw;
                 grid-template-columns: repeat(12,1fr);
-                grid-template-rows: 50vh 15vh 15vh 15vh;            
+                grid-template-rows: 50vh 12vh 12vh 12vh;            
             }
-            div:nth-child(2){
+            #css, #html{
+                border-right: none;
+            }
+            #css{
+                margin-top: 12px;
                 grid-row-start: 3;
+                grid-row-end: 4;
                 grid-column-start: 1;
                 grid-column-end: -1;
-                border-bottom: 1px white solid;
-                border-top: 1px solid white;
             }
-            div:nth-child(3){
+            #html{
                 grid-row-start: 2;
+                grid-row-end: 3;
                 grid-column-start: 1;
                 grid-column-end: -1;
-                border: none;
             }
-            div:nth-child(4){
+            #js{
+                margin-top: 25px;
+                grid-row-start: 4;
+                grid-row-end: 5;
                 grid-column-start: 1;
                 grid-column-end: -1;
-                border: none;
             }
         }
         @media only screen and (min-width: 768px) and (max-width: 992px) {
-            body {
-            }
             div:nth-child(2){
                 grid-column-start: 1;
                 grid-column-end: 5;
@@ -94,22 +126,23 @@
                 grid-column-end: 13;
             }
         }
-        .alert{
-            color: red;
-            border: 1px solid red;
-            text-align: center;
-        }
+        
     </style>
 
 </head>
 <body>
-    <h3 class="alert">This is is not 100% Works. The Javascript compiler can't save variabel. It still developing</h3>
+    <h3 class="alert">This is is not 100% Works. The Javascript compiler can't save variabel.</h3>
     <div class="container">
         <iframe id="preview"></iframe>
         <div id="css">
+            <div class="header">CSS</div>
         </div>
-        <div id="html"></div>
-        <div id="js"></div>
+        <div id="html">
+            <div class="header">HTML</div>
+        </div>
+        <div id="js">
+            <div class="header">Javascript</div>
+        </div>
     </div>
     <script>
         let html = document.getElementById('html');
@@ -120,26 +153,23 @@
             alert.style.display = 'none'
         }, 5000)
 
-        html.addEventListener('keydown', handleChange);
-        css.addEventListener('keydown', handleChange);
-        js.addEventListener('keydown', handleChange);
+        html.addEventListener('keyup', handleChange);
+        css.addEventListener('keyup', handleChange);
+        js.addEventListener('keyup', handleChange);
 
         const htmlEditor = CodeMirror(html, {
-            value: '<--! HTML CODE -->',
             lineNumbers: true,
             tabSize: 4,
             mode: 'xml',
             theme: 'dracula'
         })
         const cssEditor = CodeMirror(css, {
-            value: '/* CSS CODE */',
             lineNumbers: true,
             tabSize: 4,
             mode: 'css',
             theme: 'dracula'
         })
         const jsEditor = CodeMirror(js, {
-            value: '// Javascript CODE',
             lineNumbers: true,
             tabSize: 4,
             mode: 'javascript',
