@@ -53,22 +53,29 @@
             grid-column-end: 12;
         }
         @media only screen and (max-width: 768px) {
-            body {
+            .container{
+                display: grid;
+                border: 1px solid red;
+                grid-template-columns: repeat(12,1fr);
+                grid-template-rows: 50vh 15vh 15vh 15vh;            
             }
             div:nth-child(2){
+                grid-row-start: 3;
+                grid-column-start: 1;
+                grid-column-end: -1;
+                border-bottom: 1px white solid;
+                border-top: 1px solid white;
+            }
+            div:nth-child(3){
+                grid-row-start: 2;
                 grid-column-start: 1;
                 grid-column-end: -1;
                 border: none;
             }
-            div:nth-child(3){
-                display: none;
-                grid-column-start: 5;
-                grid-column-end: 9;
-            }
             div:nth-child(4){
-                display: none;
-                grid-column-start: 9;
-                grid-column-end: 13;
+                grid-column-start: 1;
+                grid-column-end: -1;
+                border: none;
             }
         }
         @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -87,11 +94,16 @@
                 grid-column-end: 13;
             }
         }
+        .alert{
+            color: red;
+            border: 1px solid red;
+            text-align: center;
+        }
     </style>
 
 </head>
 <body>
-    <h1>This is is not 100% Works. It still developing</h1>
+    <h3 class="alert">This is is not 100% Works. The Javascript compiler can't save variabel. It still developing</h3>
     <div class="container">
         <iframe id="preview"></iframe>
         <div id="css">
@@ -103,10 +115,15 @@
         let html = document.getElementById('html');
         let css = document.getElementById('css');
         let js = document.getElementById('js');
+        let alert = document.querySelector('.alert');
+        setTimeout(()=>{
+            alert.style.display = 'none'
+        }, 5000)
 
         html.addEventListener('keydown', handleChange);
         css.addEventListener('keydown', handleChange);
-        js.addEventListener('keydown', (e)=> { if(e.keyCode === 13){ handleChange() } });
+        js.addEventListener('keydown', handleChange);
+
         const htmlEditor = CodeMirror(html, {
             value: '<--! HTML CODE -->',
             lineNumbers: true,
@@ -130,15 +147,19 @@
         })
 
         function handleChange(){
-            let preview = document.getElementById('preview').contentWindow.document;
-            let htmlCode = htmlEditor.getValue();
-            let cssCode = "<style>" + cssEditor.getValue() + "</style/>";
-            let jsCode = "<scri" + "pt>" + jsEditor.getValue() + "</scri" + "pt>";
+            setTimeout(()=>{
+                let preview = document.getElementById('preview').contentWindow.document;
+                let head = preview.querySelector('head');
+                let htmlCode = htmlEditor.getValue();
+                let cssCode = "<style>" + cssEditor.getValue() + "</style/>";
+                let jsCode = "<scri" + "pt>" + jsEditor.getValue() + "</scri" + "pt>";
+        
+                preview.open();
+                preview.write(cssCode+htmlCode+jsCode);
+                preview.close();
+                console.log(preview)
+            }, 1);
             
-            preview.open();
-            preview.write(htmlCode+cssCode+jsCode);
-            preview.close();
-            console.log(preview)
 
         }
     </script>
