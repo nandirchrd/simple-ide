@@ -18,17 +18,29 @@
             box-sizing: border-box;
         }
         body{
+            background-color: black;
+            font-family: Arial, Helvetica, sans-serif;
         }
         .CodeMirror{
             height: calc(100% - 10%);
             width: 100%;
         }
-        .CodeMirror-vscrollbar::-webkit-scrollbar{
+        .CodeMirror-scrollbar-filler{
+            background-color: #282A36;
+        }
+        .CodeMirror-vscrollbar::-webkit-scrollbar, .CodeMirror-hscrollbar::-webkit-scrollbar{
             width: 0.3em;
+            height: 0.3em;
             /* background-color: #282A36; */
         }
-        .CodeMirror-vscrollbar::-webkit-scrollbar-thumb{
+        .CodeMirror-vscrollbar::-webkit-scrollbar-thumb, .CodeMirror-hscrollbar::-webkit-scrollbar-thumb{
             background-color: white;
+        }
+        
+        .title{
+            background-color: black;
+            color: white;
+            text-align: center;
         }
         .container{
             margin: auto;
@@ -42,10 +54,28 @@
             height: 100%;
             grid-column-start: 1;
             grid-column-end: -1;
-            border: 1px solid black;
+            border: 1px solid white;
+            border-top: black;
+            border-left: black;
+            border-right: black;
 
         }
-        #css, #html{
+        marquee{
+            margin-left: 25vw;
+            color: white;
+            font-size: 15px;
+            border-bottom: 1px solid red;
+            width: 50%;
+        }
+        a{
+            font-weight: bold;
+            color: red;
+            text-decoration: none;
+        }
+        #css{
+            border-left: 1px solid white;
+        }
+        #css, #html, #js{
             border-right: 1px solid white;
         }
         #css, #html, #js{
@@ -88,8 +118,9 @@
                 grid-template-columns: repeat(12,1fr);
                 grid-template-rows: 50vh 12vh 12vh 12vh;            
             }
-            #css, #html{
+            #css, #html, #js{
                 border-right: none;
+                border-left: none;
             }
             #css{
                 margin-top: 12px;
@@ -131,7 +162,9 @@
 
 </head>
 <body>
-    <h3 class="alert">This is is not 100% Works. The Javascript compiler can't save variabel.</h3>
+    <h3 class="title">Hello And Welcome</h3>
+    <marquee>This code created by <a href="https://github.com/nandirchrd" target="_blank">@nandirchrd</a> Don't copy this code without permission. &copy; 2021</marquee>
+    <h3 class="alert">I'm sorry if it's not 100% working. It still developing</h3>
     <div class="container">
         <iframe id="preview"></iframe>
         <div id="css">
@@ -164,12 +197,19 @@
             theme: 'dracula'
         })
         const cssEditor = CodeMirror(css, {
+            value: `body{\n` +
+                    `  color: white;\n` +
+                    `  background-color: maroon;\n` +
+                    `}`,
             lineNumbers: true,
             tabSize: 4,
             mode: 'css',
             theme: 'dracula'
         })
         const jsEditor = CodeMirror(js, {
+            value: `function main(){\n` +
+                    `   // Code in Here\n` +
+                    `}`,
             lineNumbers: true,
             tabSize: 4,
             mode: 'javascript',
@@ -178,16 +218,14 @@
 
         function handleChange(){
             setTimeout(()=>{
-                let preview = document.getElementById('preview').contentWindow.document;
+                let preview = document.getElementById('preview');;
                 let head = preview.querySelector('head');
-                let htmlCode = htmlEditor.getValue();
-                let cssCode = "<style>" + cssEditor.getValue() + "</style/>";
-                let jsCode = "<scri" + "pt>" + jsEditor.getValue() + "</scri" + "pt>";
+                let content = "";
+                    content = "<body onload='main()'>" + htmlEditor.getValue() + '</b' + 'ody>';
+                    content += "<style>" + cssEditor.getValue() + "</style/>";
+                    content += "<script>" + jsEditor.getValue() + "</scri" + "pt>";
         
-                preview.open();
-                preview.write(cssCode+htmlCode+jsCode);
-                preview.close();
-                console.log(preview)
+                preview.src = "data:text/html; charset=UTF-8," + content + "</html>";
             }, 1);
             
 
